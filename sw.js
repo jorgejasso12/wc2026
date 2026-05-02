@@ -1,5 +1,10 @@
 const CACHE = 'wc2026-v2';
-const ASSETS = ['/', '/index.html', '/manifest.json'];
+const ASSETS = [
+  '/wc2026/index.html',
+  '/wc2026/manifest.json',
+  '/wc2026/icon-192.png',
+  '/wc2026/icon-512.png'
+];
 
 self.addEventListener('install', e => {
   e.waitUntil(
@@ -17,12 +22,6 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request).then(res => {
-      if(res.ok && e.request.method === 'GET') {
-        const clone = res.clone();
-        caches.open(CACHE).then(c => c.put(e.request, clone));
-      }
-      return res;
-    }).catch(() => caches.match('/index.html')))
+    caches.match(e.request).then(cached => cached || fetch(e.request))
   );
 });
